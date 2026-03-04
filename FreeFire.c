@@ -17,15 +17,16 @@ int main() {
     do {
         printf("\n--- INVENTÁRIO BÁSICO ---\n");
         printf("1. Adicionar Item\n");
-        printf("2. Remover Item (por nome)\n");
+        printf("2. Buscar item por nome\n");
         printf("3. Listar Itens\n");
-        printf("4. Sair\n");
+        printf("4. Remover Item (por nome)\n");
+        printf("5. Sair\n");
         printf("Escolha uma opção: ");
         scanf("%d", &opcao);
         getchar(); //limpar o buffer
 
         switch (opcao) {
-            case 1:
+            case 1: // bloco de adição dos itens
                 if (totalItens < qtd_itens) {
                     printf("Nome do item: ");
                     fgets(mochila[totalItens].nome, 30, stdin);
@@ -45,9 +46,43 @@ int main() {
                 }
                 break;
 
-            case 2:
-                if (totalItens == 0) {
-                    printf(" A mochila está vazia.\n");
+            case 2:// bloco de busca
+                char busca[30];
+                int encontrado =0;
+                
+                printf("Digite o nome do item que deseja buscar: ");
+                fgets (busca, 30, stdin);
+                busca[strcspn(busca, "\n")] = 0;
+
+                for (int i=0;i<totalItens;i++){
+                    if(strcmp(mochila[i].nome, busca)==0){
+                        printf("Item Encontrado! \n");
+                        printf("Nome: %s\n", mochila[i].nome);
+                        printf("Descricao: %s\n",mochila[i].tipo);
+                        printf("Qtd: %d\n", mochila[i].quantidade);
+                        encontrado=1;
+                        break;//parar a busca assim que encontrar o item
+                        }
+                    }
+                
+                if(!encontrado){
+                    printf("ERRO! O item %s não está no seu inventario.\n",busca);
+                }
+                break;
+            
+             case 3: // bloco de resumo do inventario
+                printf("\n--- RESUMO DO SEU INVENTÁRIO ---\n");
+                printf("%-15s | %-10s | %-5s\n", "NOME", "TIPO", "QTD");
+                printf("--------------------------------------\n");
+                for (int i = 0; i < totalItens; i++) {
+                    printf("%-15s | %-10s | %-5d\n", mochila[i].nome, mochila[i].tipo, mochila[i].quantidade);
+                }
+                if (totalItens == 0) printf("Vazio...\n");
+                break;
+
+            case 4://bloco de remoção de item
+               if (totalItens == 0) {
+                    printf("A mochila está vazia.\n");
                 } else {
                     char busca[30];
                     int encontrado = 0;
@@ -66,28 +101,18 @@ int main() {
                             break;
                         }
                     }
-                    if (!encontrado) printf("Item não encontrado.\n");
+                    if (!encontrado) printf("❌ Item não encontrado.\n");
                 }
                 break;
 
-            case 3:
-                printf("\n--- RESUMO DO SEU INVENTÁRIO ---\n");
-                printf("%-15s | %-10s | %-5s\n", "NOME", "TIPO", "QTD");
-                printf("--------------------------------------\n");
-                for (int i = 0; i < totalItens; i++) {
-                    printf("%-15s | %-10s | %-5d\n", mochila[i].nome, mochila[i].tipo, mochila[i].quantidade);
-                }
-                if (totalItens == 0) printf("Vazio...\n");
-                break;
-
-            case 4:
+            case 5:
                 printf("Saindo do jogo... Até mais!\n");
-                break;
-
-            default:
+               break;
+               
+               default:
                 printf("Opção inválida!\n");
         }
-    } while (opcao != 4);
+    } while (opcao !=6);
 
     return 0;
 }
